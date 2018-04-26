@@ -384,7 +384,7 @@ public class practice1_1 {
     	
     	// 将输入落入对应区间， 原始想法：问题转换为给定key值，找bins中小于该key的
     	// 更好的想法， (key - minValue) / deltaValue 
-    	double[] bins = new double[N];
+    	int[] bins = new int[N];
     	for (int i = 0; i < input.length; i++) {
 			if(input[i] >= minValue && input[i] <= maxValue)
 			{
@@ -393,12 +393,19 @@ public class practice1_1 {
 			}
     		
 		}
+    	// 寻找bins的最大值，绘图使用
+    	int maxBins = -1;
+    	for (int i = 0; i < bins.length; i++) {
+			if(bins[i] > maxBins)
+				maxBins = bins[i];
+		}
+    	StdDraw.setYscale(0, maxBins);
     	// 绘制直方图
     	for (int i = 0; i < N; i++) {
 			double x = 1.0 * i / N;
 			double y = bins[i] / 2.0;
 			double rw = 0.5 / N;
-			double rh = bins[i] / 2.0;			
+			double rh = bins[i] / 2.0;				
 			StdDraw.filledRectangle(x, y, rw, rh);			
 		}
     	
@@ -406,6 +413,98 @@ public class practice1_1 {
     		
     }
     
+    //习题1.1.33 Matrix矩阵库
+    // 向量点积
+    public static double dot(double[] x, double[] y)
+    {
+    	if(x.length != y.length)
+    	{
+    		throw new IllegalArgumentException("the dimension of x and y must be equal");
+    	}
+    	else
+    	{
+    		double result = 0.0;
+    		for (int i = 0; i < x.length; i++) {
+    			result += x[i] * y[i];
+			}
+    		return result;
+    	}
+    }
+    
+    // 矩阵与矩阵之积x*y，要求顺序
+    public static double[][] mult(double[][] x, double[][] y)
+    {
+    	if(x.length != y[0].length || x[0].length != y.length)
+    	{
+    		throw new IllegalArgumentException("the dimension of x and y cannot multiply");
+    	}
+    	else
+    	{
+    		double[][] result = new double[x.length][y[0].length];
+    		for (int i = 0; i < x.length; i++) {
+    			for (int j = 0; j < y[0].length; j++) {
+    				result[i][j] = 0.0;
+    				for (int k = 0; k < y.length; k++) {
+    					result[i][j] += x[i][k] * y[k][j];
+					}
+				}
+			}
+    		return result;
+    	}
+    }
+    
+    // 矩阵的转置
+    public static double[][] transpose(double[][] a)
+    {
+
+		double[][] result = new double[a[0].length][a.length];
+		for (int i = 0; i < a[0].length; i++) {
+			for (int j = 0; j < a.length; j++) {
+				result[i][j] = a[j][i];
+			}
+		}
+		return result;
+    }
+    
+    // 矩阵与向量之积，要求顺序
+    public static double[] mult(double[][] a, double[] x)
+    {
+    	if(a[0].length != x.length)
+    	{
+    		throw new IllegalArgumentException("the dimension of x and y cannot multiply");
+    	}
+    	else
+    	{
+    		double[] result = new double[a.length];
+    		for (int i = 0; i < a.length; i++) {
+    			result[i] = 0.0;
+				for (int j = 0; j < x.length; j++) {
+					result[i] += a[i][j] * x[j];
+				}
+			}
+    		return result;
+    	}
+    }
+    
+    // 向量与矩阵之积，要求顺序
+    public static double[] mult(double[] x, double[][] a)
+    {
+    	if(a.length != x.length)
+    	{
+    		throw new IllegalArgumentException("the dimension of x and y cannot multiply");
+    	}
+    	else
+    	{
+    		double[] result = new double[a[0].length];
+    		for (int i = 0; i < a[0].length; i++) {
+    			result[i] = 0.0;
+				for (int j = 0; j < x.length; j++) {
+					result[i] += x[j] * a[j][i];
+				}
+			}
+    		return result;
+    	}
+    }
     
     public static void main(String[] args) { 
         System.out.println(abs(-4));
@@ -472,11 +571,16 @@ public class practice1_1 {
     	RandomLink(CirclePoints, 0.5);
     	*/
     	
-    	/*
+    	/*//绘图存在问题
     	//习题1.1.32
     	double[] input = {1.1,3.2,5.7,5.2,5.5,6.1,12.2,14.6};
-    	Histgram(input, 1, 15, 100);
+    	Histgram(input, 1, 15, 3);
     	*/
+    	
+    	//习题1.1.33
+    	double[][] ma1 = {{1,2,3}, {4,5,6}};
+    	double[][] ma2 = {{1,2}, {3,4}, {5,6}};
+    	double[][] result = mult(ma1, ma2);
         
                 
     }
